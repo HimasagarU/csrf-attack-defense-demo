@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SecureBank - Authentication Status</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #2563eb;
+            --secondary: #1e40af;
+            --success: #22c55e;
+            --error: #ef4444;
+            --text: #1f2937;
+            --light: #f3f4f6;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            padding: 1rem;
+        }
+
+        .status-container {
+            background: white;
+            padding: 2.5rem;
+            border-radius: 1rem;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: var(--primary);
+            margin-bottom: 2rem;
+        }
+
+        .status-icon {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1.5rem;
+            animation: scaleIn 0.5s ease-out;
+        }
+
+        .status-icon i {
+            font-size: 2.5rem;
+            color: white;
+        }
+
+        .status-icon.error {
+            background-color: var(--error);
+        }
+
+        .status-icon.success {
+            background-color: var(--success);
+        }
+
+        .status-title {
+            font-size: 1.5rem;
+            color: var(--text);
+            margin-bottom: 1rem;
+        }
+
+        .status-message {
+            color: #6b7280;
+            margin-bottom: 2rem;
+            line-height: 1.6;
+        }
+
+        .button {
+            display: inline-block;
+            padding: 0.75rem 1.5rem;
+            background: var(--primary);
+            color: white;
+            text-decoration: none;
+            border-radius: 0.5rem;
+            font-weight: 500;
+            transition: all 0.3s;
+            border: none;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+
+        .button:hover {
+            background: var(--secondary);
+            transform: translateY(-1px);
+        }
+
+        .button.secondary {
+            background: transparent;
+            color: var(--text);
+            border: 2px solid #e5e7eb;
+            margin-top: 1rem;
+        }
+
+        .button.secondary:hover {
+            background: var(--light);
+            border-color: #d1d5db;
+        }
+
+        .button-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            align-items: center;
+        }
+
+        @keyframes scaleIn {
+            0% {
+                transform: scale(0.5);
+                opacity: 0;
+            }
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        @keyframes slideIn {
+            0% {
+                transform: translateY(20px);
+                opacity: 0;
+            }
+            100% {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .status-container > * {
+            animation: slideIn 0.5s ease-out forwards;
+        }
+
+        @media (max-width: 480px) {
+            .status-container {
+                padding: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Invalid Credentials Page -->
+    <div class="status-container">
+        <div class="logo">SecureBank</div>
+        <div class="status-icon error">
+            <i class="fas fa-times"></i>
+        </div>
+        <h1 class="status-title">Invalid Credentials</h1>
+        <p class="status-message">The username or password you entered is incorrect. Please try again or reset your password if you've forgotten it.</p>
+        <div class="button-group">
+            <a href="/login" class="button">Try Again</a>
+            <a href="/forgot-password" class="button secondary">Forgot Password?</a>
+        </div>
+    </div>
+
+    <!-- Password Changed Successfully Page -->
+    <div class="status-container" style="display: none;">
+        <div class="logo">SecureBank</div>
+        <div class="status-icon success">
+            <i class="fas fa-check"></i>
+        </div>
+        <h1 class="status-title">Password Changed Successfully</h1>
+        <p class="status-message">Your password has been updated. You can now use your new password to log in to your account.</p>
+        <div class="button-group">
+            <a href="/login" class="button">Login Now</a>
+            <a href="/dashboard" class="button secondary">Return to Dashboard</a>
+        </div>
+    </div>
+</body>
+</html>
