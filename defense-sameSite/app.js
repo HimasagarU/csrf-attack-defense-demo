@@ -22,7 +22,8 @@ app.use(session({
     saveUninitialized: false,
     cookie: {
         httpOnly: true,
-        sameSite: 'Strict' // SameSite=Strict to prevent CSRF
+        sameSite: 'Lax',
+        secure: true 
     }
 }));
 // Set EJS as the view engine
