@@ -33,8 +33,8 @@ app.set('views', './views');
 
 // Middleware: Custom header check for CSRF defense
 app.use((req, res, next) => {
-    // For any POST requests, check if the 'X-Requested-With' header is set to 'XMLHttpRequest'
-    if (req.method === 'POST' && req.headers['x-requested-with'] !== 'XMLHttpRequest') {
+    // For any POST requests, check if the 'X-Requested-With' header is set to 'ICSdemoCSRF'
+    if (req.method === 'POST' && req.headers['x-requested-with'] !== 'ICSdemoCSRF') {
         return res.status(403).send('Forbidden: Missing custom header');
     }
     next();
@@ -43,6 +43,10 @@ app.use((req, res, next) => {
 // Render login page
 app.get('/login', (req, res) => {
     res.render('login');
+});
+
+app.get('/invalid', (req, res) => {
+    res.render('invalid');
 });
 
 // Render home page, check if user is logged in
@@ -58,11 +62,12 @@ app.post('/login', async (req, res) => {
     const user = await User.findOne({ username: req.body.username });
     if (user && user.password === req.body.password) {
         req.session.userId = user._id;
-        res.json({ success: true, redirectUrl: '/home' }); // Send JSON response for AJAX
+        res.json({ success: true, redirectUrl: '/home' });
     } else {
-        res.status(401).json({ success: false, message: 'Invalid credentials' });
+        res.json({ success: false, redirectUrl: '/invalid', message: 'Invalid username or password' });
     }
 });
+
 
 // Render change-password page with AJAX form
 app.get('/change-password', (req, res) => {
@@ -74,17 +79,17 @@ app.get('/change-password', (req, res) => {
 
 // Handle password change with custom header protection
 app.post('/change-password', async (req, res) => {
-  if (!req.session.userId) {
-      return res.status(401).render('error', { message: 'Unauthorized access' });
-  }
+    if (!req.session.userId) {
+        return res.status(401).render('error', { message: 'Unauthorized access' });
+    }
 
-  // Update the user's password in the database
-  await User.findByIdAndUpdate(req.session.userId, { password: req.body.newPassword });
+    // Update the user's password in the database
+    await User.findByIdAndUpdate(req.session.userId, { password: req.body.newPassword });
 
-  // Render the passwordchange.ejs page upon successful password change
-  res.render('passwordchange');
+    // Render the passwordchange.ejs page upon successful password change
+    res.render('passwordchange');
 });
 
 
 // Start server
-app.listen(3000, () => console.log('Server running on http://localhost:3000/login'));
+app.listen(3000, () => console.log('Server running on http://localhost:3000/home'));

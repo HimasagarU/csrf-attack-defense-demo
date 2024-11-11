@@ -23,8 +23,19 @@ app.use(session({
     saveUninitialized: false,
     cookie: { httpOnly: true }
 }));
+
+// CSRF protection middleware
 const csrfProtection = csrf();
 app.use(csrfProtection);
+
+// Middleware to log the CSRF token on each request
+app.use((req, res, next) => {
+    const csrfToken = req.csrfToken();
+    console.log("CSRF Token for request:", csrfToken);
+    res.locals.csrfToken = csrfToken; // Make CSRF token available in all views
+    next();
+});
+
 // Set EJS as the view engine
 app.set('view engine', 'ejs');
 
@@ -32,40 +43,40 @@ app.set('view engine', 'ejs');
 app.set('views', './views');
 
 // Render login page with CSRF token
-app.get('/login', csrfProtection, (req, res) => {
-    res.render('login', { csrfToken: req.csrfToken() });
+app.get('/login', (req, res) => {
+    res.render('login', { csrfToken: res.locals.csrfToken });
 });
 
-app.get('/home', csrfProtection, (req, res) => {
-    res.render('home', { csrfToken: req.csrfToken() });
+app.get('/home', (req, res) => {
+    res.render('home', { csrfToken: res.locals.csrfToken });
 });
 
 // Handle login
-app.post('/login', csrfProtection, async (req, res) => {
+app.post('/login', async (req, res) => {
     const user = await User.findOne({ username: req.body.username });
     if (user && user.password === req.body.password) {
         req.session.userId = user._id;
-        res.render('home', { csrfToken: req.csrfToken() });
+        res.render('home', { csrfToken: res.locals.csrfToken });
     } else {
-        res.render('invalid', { csrfToken: req.csrfToken() });
+        res.render('invalid', { csrfToken: res.locals.csrfToken });
     }
 });
 
 // Render change password page with CSRF token
-app.get('/change-password', csrfProtection, (req, res) => {
+app.get('/change-password', (req, res) => {
     if (!req.session.userId) {
-        return res.render('invalid', { csrfToken: req.csrfToken() });
+        return res.render('invalid', { csrfToken: res.locals.csrfToken });
     }
-    res.render('change-password', { csrfToken: req.csrfToken() });
+    res.render('change-password', { csrfToken: res.locals.csrfToken });
 });
 
 // Handle password change with CSRF token validation
-app.post('/change-password', csrfProtection, async (req, res) => {
+app.post('/change-password', async (req, res) => {
     if (!req.session.userId) {
         return res.status(401).send('Unauthorized');
     }
     await User.findByIdAndUpdate(req.session.userId, { password: req.body.newPassword });
-    res.render('passwordChanged', { csrfToken: req.csrfToken() });
+    res.render('passwordChanged', { csrfToken: res.locals.csrfToken });
 });
 
 // Start server

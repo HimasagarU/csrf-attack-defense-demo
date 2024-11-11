@@ -185,33 +185,39 @@
 
     <script>
         function login() {
-            // Get the values of the inputs using the corrected IDs
             const username = document.getElementById('username').value;
             const password = document.getElementById('password').value;
-
-            // Send AJAX request to /login with the custom header and data
+    
             fetch('/login', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'X-Requested-With': 'XMLHttpRequest'  // Custom header for CSRF defense
+                    'X-Requested-With': 'ICSdemoCSRF'  // Custom header for CSRF defense
                 },
                 body: JSON.stringify({ username, password })
             })
             .then(response => {
-                if (!response.ok) throw new Error('Login failed');
+                if (!response.ok) {
+                    throw new Error('Failed to log in.');
+                }
                 return response.json();
             })
             .then(data => {
                 if (data.success) {
+                    // Redirect to the home page if login is successful
                     window.location.href = data.redirectUrl;
                 } else {
-                    alert(data.message || 'Login failed');
+                    // Redirect to the invalid page if login fails
+                    window.location.href = data.redirectUrl;
                 }
             })
-            .catch(error => console.error('Error:', error));
+            .catch(error => {
+                alert(`Error: ${error.message}`);
+                console.error('Error:', error);
+            });
         }
     </script>
+    
 </body>
 
 
