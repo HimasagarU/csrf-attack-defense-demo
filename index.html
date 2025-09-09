@@ -1,23 +1,45 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-  <meta charset="UTF-8">
-  <title>CSRF Attack Simulation</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CSRF Attack Defense Demo</title>
+    <style>
+        body {
+            background-color: #f5f5f5;
+            color: #333;
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+        }
+        
+        h1, h2, h3 {
+            color: #2c3e50;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+    </style>
 </head>
-
 <body>
-  <h2>CSRF Attack Demo</h2>
-  <p>If you are logged into the application, this will attempt to change your password to 'hackedpassword123'.</p>
-
-  <form id="csrfForm" action="http://localhost:3000/change-password" method="POST">
-    <input type="hidden" name="newPassword" value="hackedpassword123">
-  </form>
-
-  <script>
-    // Automatically submit the form to initiate the CSRF attack
-    document.getElementById('csrfForm').submit();
-  </script>
+    <div class="container">
+        <h1>CSRF Attack Defense Demo</h1>
+        <p>This is a demonstration of CSRF (Cross-Site Request Forgery) attacks and various defense mechanisms.</p>
+        
+        <h2>Available Demos:</h2>
+        <ul>
+            <li><a href="csrf-attack.html">CSRF Attack Demo</a></li>
+            <li><a href="defense-csrfToken/">CSRF Token Defense</a></li>
+            <li><a href="defense-customHeader/">Custom Header Defense</a></li>
+            <li><a href="defense-sameSite/">SameSite Cookie Defense</a></li>
+        </ul>
+    </div>
 </body>
-
 </html>
